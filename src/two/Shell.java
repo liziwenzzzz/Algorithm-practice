@@ -2,38 +2,22 @@ package two;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-@SuppressWarnings("all")
-public class MergeBU {
-	private MergeBU() {
+public class Shell {
+	private Shell() {
 	}
 
 	public static void sort(Comparable[] a) {
 		int n = a.length;
-		for (int sz = 1; sz < n - 1; sz *= 2) {
-			for (int i = 0; i < n - sz; i += sz + sz) {
-				merge(a, i, i + sz - 1, Math.min(i + sz + sz - 1, n - 1));
+		int inc = 1;
+		while (inc < n / 3)
+			inc = inc * 3 + 1;
+		while (inc >= 1) {
+			for (int i = inc; i < n; i++) {
+				for (int j = i; j >= inc && less(a[j], a[j - inc]); j -= inc) {
+					exch(a, j, j - inc);
+				}
 			}
-		}
-	}
-
-	// first put into aux,then to a
-	private static void merge(Comparable[] a, int left, int mid, int right) {
-		int n = right - left + 1;
-		Comparable[] aux = new Comparable[n];
-		int i = left, j = mid + 1, k = 0;
-		while (k < n) { // only one was executed,if else if,
-			// System.out.println(i + " " + j + " " + k);
-			if (i > mid)
-				aux[k++] = a[j++];
-			else if (j > right)
-				aux[k++] = a[i++];
-			else if (less(a[i], a[j]))
-				aux[k++] = a[i++];
-			else
-				aux[k++] = a[j++];
-		}
-		for (int t = left; t <= right; t++) {
-			a[t] = aux[t - left];
+			inc /= 3;
 		}
 	}
 
@@ -62,7 +46,7 @@ public class MergeBU {
 		System.out.println();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args){
 		int n = 10;
 		Integer[] a = new Integer[n];
 		for (int i = 0; i < n; i++) {

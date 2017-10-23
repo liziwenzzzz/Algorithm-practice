@@ -2,8 +2,8 @@ package two;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Quick {
-	private Quick() {
+public class Quick3way {
+	private Quick3way() {
 	}
 
 	public static void sort(Comparable[] a) {
@@ -11,27 +11,24 @@ public class Quick {
 	}
 
 	private static void sort(Comparable[] a, int lo, int hi) {
-		if (hi <= lo)
+		if (lo >= hi)
 			return;
-		int p = pritition(a, lo, hi);
-		sort(a, lo, p - 1);
-		sort(a, p + 1, hi);
-	}
 
-	private static int pritition(Comparable[] a, int lo, int hi) {
 		exch(a, lo, ThreadLocalRandom.current().nextInt(lo, hi + 1));
-		int i = lo, j = hi + 1;
-		while (true) {
-			while (i < hi && less(a[++i], a[lo]))
-				;
-			while (j > lo && less(a[lo], a[--j]))
-				;
-			if (i >= j)
-				break;
-			exch(a, i, j);
+
+		int lt = lo, i = lo + 1, gt = hi;
+		Comparable v = a[lo];
+		while (i <= gt) {
+			int cmp = a[i].compareTo(v);
+			if (cmp > 0)
+				exch(a, gt--, i);
+			else if (cmp < 0)
+				exch(a, i++, lt++);
+			else
+				i++;
 		}
-		exch(a, lo, j);
-		return j;
+		sort(a, lo, lt - 1);
+		sort(a, gt + 1, hi);
 	}
 
 	private static void exch(Comparable[] a, int i, int j) {
@@ -59,7 +56,7 @@ public class Quick {
 		System.out.println();
 	}
 
-	public static void main(String[] args){
+	public static void main(String[] args) {
 		int n = 10;
 		Integer[] a = new Integer[n];
 		for (int i = 0; i < n; i++) {

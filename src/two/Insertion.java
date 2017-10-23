@@ -1,11 +1,7 @@
 package two;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
-//@SuppressWarnings("all") // suppress all warning
 public class Insertion {
 
 	// can't create instance
@@ -51,11 +47,11 @@ public class Insertion {
 		System.out.println();
 	}
 
-	public static void main(String[] args) throws FileNotFoundException {
-		int n=10;
+	public static void main(String[] args) {
+		int n = 10;
 		Integer[] a = new Integer[n];
 		for (int i = 0; i < n; i++) {
-			a[i] = ThreadLocalRandom.current().nextInt(0,100);
+			a[i] = ThreadLocalRandom.current().nextInt(0, 100);
 		}
 		show(a);
 		sort(a);
