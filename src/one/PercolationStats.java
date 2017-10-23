@@ -11,13 +11,17 @@ public class PercolationStats {
 
 	public PercolationStats(int n, int t) {
 		while (t-- > 0) {
+			int count = 0;
 			Percolation pp = new Percolation(n);
 			while (!pp.percolates()) {
 				int x = ThreadLocalRandom.current().nextInt(1, n + 1);
 				int y = ThreadLocalRandom.current().nextInt(1, n + 1);
+				if (pp.isOpen(x, y)) // ±‹√‚÷ÿ∏¥µƒµ„
+					continue;
 				pp.open(x, y);
+				count++;
 			}
-			list.add(pp.count() * 1.0 / (n * n));
+			list.add(count * 1.0 / (n * n));
 		}
 	}
 

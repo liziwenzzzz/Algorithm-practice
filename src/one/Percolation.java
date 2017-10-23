@@ -1,98 +1,95 @@
 package one;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Arrays;
 
 public class Percolation {
 
-	int[][] tables;
-	int count = 0;
+	private int n;
+	private boolean[][] tables;
+	private UnionFind uf;
 
-	public Percolation(int N) {
-		if (N <= 0)
-			throw new IllegalArgumentException();
-		tables = new int[N + 1][N + 1];
+	private int change(int i, int j) {
+		return i * n + j;
 	}
 
-	public void open(int i, int j) {
-		if (i < 1 || i >= tables.length)
-			throw new IndexOutOfBoundsException();
-		if (j < 1 || i >= tables.length)
-			throw new IndexOutOfBoundsException();
-		if (isOpen(i, j))
-			return;
-		tables[i][j] = ++count;
+	public Percolation(int n) {
+		this.n = n;
+		tables = new boolean[n + 2][n + 2];
+		uf = new UnionFind((n + 2) * (n + 2));
+		Arrays.fill(tables[0], true);
+		Arrays.fill(tables[n + 1], true);
+		for (int j = 0; j < n + 2; j++) {
+			uf.union(change(0, j), change(0, j + 1));
+			uf.union(change(n + 1, j), change(n + 1, j + 1));
+		}
 	}
 
 	public boolean isOpen(int i, int j) {
-		return tables[i][j] != 0;
-	}
-
-	public boolean isFull(int i, int j) {
-		return tables[i][j] == 0;
-	}
-
-	//这样太慢了，采用递归？
-	public boolean percolates() {
-		for (int i = 1; i < tables.length - 1; i++) {
-			for (int j = 1; j < tables.length - 1; j++) {
-				if (isOpen(i, j) && isOpen(i + 1, j))
-					union(i, j, i + 1, j);
-				if (isOpen(i, j) && isOpen(i, j + 1))
-					union(i, j, i, j + 1);
-			}
-		}
-		Set<Integer> set1 = new HashSet<>();
-		Set<Integer> set2 = new HashSet<>();
-		for (int i = 1; i < tables.length; i++) {
-			if (isOpen(1, i)) {
-				set1.add(tables[1][i]);
-			}
-			if (isOpen(tables.length - 1, i)) {
-				set2.add(tables[tables.length - 1][i]);
-			}
-		}
-		/*
-		 * for(int i=1;i<tables.length;i++){ for(int j=1;j<tables.length;j++){
-		 * System.out.print(find(i, j)); } System.out.println(); }
-		 * System.out.println(count);
-		 */
-		set1.retainAll(set2);
-		return set1.size() > 0;
-	}
-
-	private void union(int i, int j, int x, int y) {
-		if (i < 1 || i >= tables.length)
-			throw new IndexOutOfBoundsException();
-		if (j < 1 || i >= tables.length)
-			throw new IndexOutOfBoundsException();
-		if (connected(i, j, x, y))
-			return;
-		if (i < x)
-			tables[x][y] = find(i, j);
-		else
-			tables[i][j] = find(x, y);
-
-		if (j < y)
-			tables[x][y] = find(i, j);
-		else
-			tables[i][j] = find(x, y);
-	}
-
-	private int find(int i, int j) {
+		if (i < 1 || i > n || j < 1 || j > n)
+			throw new IndexOutOfBoundsException("i or j out of bound!");
 		return tables[i][j];
 	}
 
-	private boolean connected(int i, int j, int x, int y) {
-		return find(i, j) == find(x, y);
+	// is the (i,j) full?
+	public boolean isFull(int i, int j) {
+		if (i < 1 || i > n || j < 1 || j > n)
+			throw new IndexOutOfBoundsException("i or j out of bound!");
+		return uf.connected(change(0, 0), change(i, j));
 	}
 
-	public int count() {
-		return count;
+	public void open(int i, int j) {
+		if (i < 1 || i > n || j < 1 || j > n)
+			throw new IndexOutOfBoundsException("i or j out of bound!");
+		tables[i][j] = true;
+		if (tables[i + 1][j])
+			uf.union(change(i, j), change(i + 1, j));
+		if (tables[i][j + 1])
+			uf.union(change(i, j + 1), change(i, j));
+		if (tables[i][j - 1])
+			uf.union(change(i, j), change(i, j - 1));
+		if (tables[i - 1][j])
+			uf.union(change(i, j), change(i - 1, j));
+	}
+
+	public boolean percolates() {
+		return uf.connected(change(0, 1), change(n + 1, 1));
 	}
 
 	public static void main(String[] args) {
-		Percolation test = new Percolation(10);
-		System.out.println(test.percolates());
+		Percolation test = new Percolation(5);
+		int i = 1;
+		while (!test.percolates()) {
+			test.open(i++, 2);
+		}
+		System.out.println("yes");
 	}
+
+}
+
+class UnionFind {
+	int[] father;
+
+	public UnionFind(int n) {
+		father = new int[n];
+		for (int i = 0; i < n; i++) {
+			father[i] = i;
+		}
+	}
+
+	public void union(int i, int j) {
+		int xi = find(i);
+		int xj = find(j);
+		father[xi] = xj;
+	}
+
+	public int find(int i) {
+		while (i != father[i])
+			i = father[i];
+		return i;
+	}
+
+	public boolean connected(int i, int j) {
+		return find(i) == find(j);
+	}
+
 }
