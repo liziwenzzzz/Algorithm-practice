@@ -2,6 +2,11 @@ package one;
 
 import java.util.Arrays;
 
+import javax.swing.text.StyledEditorKit.BoldAction;
+
+import com.sun.java.swing.plaf.windows.resources.windows_es;
+import com.sun.org.apache.regexp.internal.recompile;
+
 public class Percolation {
 
 	private int n;
@@ -79,6 +84,8 @@ class UnionFind {
 	public void union(int i, int j) {
 		int xi = find(i);
 		int xj = find(j);
+		if (xi == xj)
+			return;
 		father[xi] = xj;
 	}
 
@@ -92,4 +99,46 @@ class UnionFind {
 		return find(i) == find(j);
 	}
 
+}
+
+class WeightUnionFind {
+	int[] father;
+	int[] weight; // also could use the height of subtree,instead the size of
+					// subtree
+
+	public WeightUnionFind(int n) {
+		father = new int[n];
+		weight = new int[n];
+		for (int i = 0; i < n; i++) {
+			father[i] = i;
+			weight[i] = 1;
+		}
+	}
+
+	public void union(int i, int j) {
+		int xi = find(i);
+		int xj = find(j);
+
+		if (xi == xj)
+			return; // it's necessary to return,or the weight is wrong
+		if (weight[xi] > weight[xj]) {
+			father[xj] = xi;
+			weight[xi] += weight[xj];
+		} else {
+			father[xi] = xj;
+			weight[xj] += weight[xi];
+		}
+
+	}
+
+	public int find(int i) {
+		while (i != father[i]) {
+			i = father[i];
+		}
+		return i;
+	}
+
+	public boolean connected(int i, int j) {
+		return find(i) == find(j);
+	}
 }
