@@ -32,6 +32,7 @@ public class Percolation {
 		return tables[i][j] == 0;
 	}
 
+	//这样太慢了，采用递归？
 	public boolean percolates() {
 		for (int i = 1; i < tables.length - 1; i++) {
 			for (int j = 1; j < tables.length - 1; j++) {
