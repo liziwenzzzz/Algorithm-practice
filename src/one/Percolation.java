@@ -2,16 +2,11 @@ package one;
 
 import java.util.Arrays;
 
-import javax.swing.text.StyledEditorKit.BoldAction;
-
-import com.sun.java.swing.plaf.windows.resources.windows_es;
-import com.sun.org.apache.regexp.internal.recompile;
-
 public class Percolation {
 
 	private int n;
 	private boolean[][] tables;
-	private UnionFind uf;
+	private WeightUnionFind uf;
 
 	private int change(int i, int j) {
 		return i * n + j;
@@ -20,7 +15,7 @@ public class Percolation {
 	public Percolation(int n) {
 		this.n = n;
 		tables = new boolean[n + 2][n + 2];
-		uf = new UnionFind((n + 2) * (n + 2));
+		uf = new WeightUnionFind((n + 2) * (n + 2));
 		Arrays.fill(tables[0], true);
 		Arrays.fill(tables[n + 1], true);
 		for (int j = 0; j < n + 2; j++) {
@@ -103,8 +98,7 @@ class UnionFind {
 
 class WeightUnionFind {
 	int[] father;
-	int[] weight; // also could use the height of subtree,instead the size of
-					// subtree
+	int[] weight; // could use the height of subtree,instead the size of subtree
 
 	public WeightUnionFind(int n) {
 		father = new int[n];
