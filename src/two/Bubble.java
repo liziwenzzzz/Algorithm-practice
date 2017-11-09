@@ -48,15 +48,22 @@ public class Bubble {
 	}
 
 	public static void main(String[] args) {
-		int n = 10;
+		int n = 100000;
 		Integer[] a = new Integer[n];
 		for (int i = 0; i < n; i++) {
-			a[i] = ThreadLocalRandom.current().nextInt(0, 100);
+			a[i] = ThreadLocalRandom.current().nextInt(0, 100000);
 		}
-		show(a);
+		// show(a);
+
+		long start = System.currentTimeMillis();
 		sort(a);
+		long end = System.currentTimeMillis();
+
 		assert isSorted(a);
-		show(a);
+		// show(a);
+		System.out.println("use time:" + (end - start) * 1000.0 + " us");
+		System.out.println("use memory:"
+				+ (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1000 + " kilo bytes");
 	}
 
 }
