@@ -4,8 +4,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Test {
 
+	static int n = 10000;
 	public static void randomTest(String type) {
-		int n = 100000;
 		Integer[] a = new Integer[n];
 		for (int i = 0; i < n; i++) {
 			a[i] = ThreadLocalRandom.current().nextInt(0, n);
@@ -34,7 +34,6 @@ public class Test {
 	}
 
 	public static void ascTest(String type) {
-		int n = 100000;
 		Integer[] a = new Integer[n];
 		for (int i = 0; i < n; i++) {
 			a[i] = i;
@@ -63,7 +62,6 @@ public class Test {
 	}
 
 	public static void desTest(String type) {
-		int n = 100000;
 		Integer[] a = new Integer[n];
 		for (int i = 0; i < n; i++) {
 			a[i] = n - i;
@@ -92,7 +90,7 @@ public class Test {
 	}
 
 	public static void main(String[] args) {
-		System.out.println("sort 100000 random number:");
+		System.out.println("sort "+n+" random number:");
 		System.out.println("Insersion result:");
 		randomTest("Insertion");
 		System.out.println("\nMerge result:");
@@ -104,7 +102,7 @@ public class Test {
 		System.out.println("\nQuick3way result:");
 		randomTest("Quick3way");
 
-		System.out.println("\nsort 100000 asc number:");
+		System.out.println("\nsort "+" asc number:");
 		System.out.println("Insersion result:");
 		ascTest("Insertion");
 		System.out.println("\nMerge result:");
@@ -116,7 +114,7 @@ public class Test {
 		System.out.println("\nQuick3way result:");
 		ascTest("Quick3way");
 
-		System.out.println("\nsort 100000 des number:");
+		System.out.println("\nsort "+" des number:");
 		System.out.println("Insersion result:");
 		desTest("Insertion");
 		System.out.println("\nMerge result:");
