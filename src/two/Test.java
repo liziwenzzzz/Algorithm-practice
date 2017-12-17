@@ -4,11 +4,11 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Test {
 
-	static int n = 10000;
+	static int n = 100000;
 	public static void randomTest(String type) {
 		Integer[] a = new Integer[n];
 		for (int i = 0; i < n; i++) {
-			a[i] = ThreadLocalRandom.current().nextInt(0, n);
+			a[i] = ThreadLocalRandom.current().nextInt(0, 100);
 		}
 		// show(a);
 
